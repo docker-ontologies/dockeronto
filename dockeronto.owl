@@ -21,10 +21,19 @@
     
 
 
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Dockerfile"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Command"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ADD -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ADD">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">ADD
 ADD has two forms:
 
@@ -65,7 +74,7 @@ If &lt;src&gt; is a directory, the entire contents of the directory are copied, 
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ARG -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ARG">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">ARG &lt;name&gt;[=&lt;default value&gt;]
 The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command using the --build-arg &lt;varname&gt;=&lt;value&gt; flag. If a user specifies a build argument that was not defined in the Dockerfile, the build outputs a warning.
 
@@ -98,7 +107,7 @@ An ARG variable definition comes into effect from the line on which it is define
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#CMD -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#CMD">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">The CMD instruction has three forms:
 
 CMD [&quot;executable&quot;,&quot;param1&quot;,&quot;param2&quot;] (exec form, this is the preferred form)
@@ -116,7 +125,7 @@ Note: If CMD is used to provide default arguments for the ENTRYPOINT instruction
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#COPY -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#COPY">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">COPY has two forms:
 
 COPY &lt;src&gt;... &lt;dest&gt;
@@ -157,7 +166,7 @@ If &lt;dest&gt; doesn’t exist, it is created along with all missing directorie
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ENTRYPOINT -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ENTRYPOINT">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">ENTRYPOINT has two forms:
 
 ENTRYPOINT [&quot;executable&quot;, &quot;param1&quot;, &quot;param2&quot;] (exec form, preferred)
@@ -179,7 +188,7 @@ Only the last ENTRYPOINT instruction in the Dockerfile will have an effect.</rdf
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ENV -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ENV">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">ENV &lt;key&gt; &lt;value&gt;
 ENV &lt;key&gt;=&lt;value&gt; ...
 The ENV instruction sets the environment variable &lt;key&gt; to the value &lt;value&gt;. This value will be in the environment of all “descendant” Dockerfile commands and can be replaced inline in many as well.
@@ -207,7 +216,7 @@ The environment variables set using ENV will persist when a container is run fro
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#EXPOSE -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#EXPOSE">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">EXPOSE &lt;port&gt; [&lt;port&gt;...]
 The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime. EXPOSE does not make the ports of the container accessible to the host. To do that, you must use either the -p flag to publish a range of ports or the -P flag to publish all of the exposed ports. You can expose one port number and publish it externally under another number.
 
@@ -219,7 +228,7 @@ To set up port redirection on the host system, see using the -P flag. The Docker
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#FROM -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#FROM">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">FROM &lt;image&gt;
 Or
 
@@ -241,7 +250,7 @@ The tag or digest values are optional. If you omit either of them, the builder a
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#HEALTHCHECK -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#HEALTHCHECK">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">The HEALTHCHECK instruction has two forms:
 
 HEALTHCHECK [OPTIONS] CMD command (check container health by running a command inside the container)
@@ -286,7 +295,7 @@ The HEALTHCHECK feature was added in Docker 1.12.</rdfs:comment>
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#LABEL -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#LABEL">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">LABEL &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt; &lt;key&gt;=&lt;value&gt; ...
 The LABEL instruction adds metadata to an image. A LABEL is a key-value pair. To include spaces within a LABEL value, use quotes and backslashes as you would in command-line parsing. A few usage examples:
 
@@ -323,7 +332,7 @@ To view an image’s labels, use the docker inspect command.
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#MAINTAINER -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#MAINTAINER">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">MAINTAINER &lt;name&gt;
 The MAINTAINER instruction sets the Author field of the generated images. The LABEL instruction is a much more flexible version of this and you should use it instead, as it enables setting any metadata you require, and can be viewed easily, for example with docker inspect. To set a label corresponding to the MAINTAINER field you could use:
 
@@ -337,7 +346,7 @@ This will then be visible from docker inspect with the other labels.</rdfs:comme
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ONBUILD -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ONBUILD">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">ONBUILD [INSTRUCTION]
 The ONBUILD instruction adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build. The trigger will be executed in the context of the downstream build, as if it had been inserted immediately after the FROM instruction in the downstream Dockerfile.
 
@@ -370,7 +379,7 @@ Warning: The ONBUILD instruction may not trigger FROM or MAINTAINER instructions
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#RUN -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#RUN">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">RUN has 2 forms:
 
 RUN &lt;command&gt; (shell form, the command is run in a shell, which by default is /bin/sh -c on Linux or cmd /S /C on Windows)
@@ -387,7 +396,7 @@ The exec form makes it possible to avoid shell string munging, and to RUN comman
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#SHELL -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#SHELL">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">SHELL [&quot;executable&quot;, &quot;parameters&quot;]
 The SHELL instruction allows the default shell used for the shell form of commands to be overridden. The default shell on Linux is [&quot;/bin/sh&quot;, &quot;-c&quot;], and on Windows is [&quot;cmd&quot;, &quot;/S&quot;, &quot;/C&quot;]. The SHELL instruction must be written in JSON form in a Dockerfile.
 
@@ -443,7 +452,7 @@ RUN c:\example\Execute-MyCmdlet -sample &apos;hello world&apos;</rdfs:comment>
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#STOPSIGNAL -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#STOPSIGNAL">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">The STOPSIGNAL instruction sets the system call signal that will be sent to the container to exit. This signal can be a valid unsigned number that matches a position in the kernel’s syscall table, for instance 9, or a signal name in the format SIGNAME, for instance SIGKILL.</rdfs:comment>
     </owl:ObjectProperty>
     
@@ -452,7 +461,7 @@ RUN c:\example\Execute-MyCmdlet -sample &apos;hello world&apos;</rdfs:comment>
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#USER -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#USER">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">USER daemon
 The USER instruction sets the user name or UID to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile.</rdfs:comment>
     </owl:ObjectProperty>
@@ -462,7 +471,7 @@ The USER instruction sets the user name or UID to use when running the image and
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#VOLUME -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#VOLUME">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">VOLUME [&quot;/data&quot;]
 The VOLUME instruction creates a mount point with the specified name and marks it as holding externally mounted volumes from native host or other containers. The value can be a JSON array, VOLUME [&quot;/var/log/&quot;], or a plain string with multiple arguments, such as VOLUME /var/log or VOLUME /var/log /var/db. For more information/examples and mounting instructions via the Docker client, refer to Share Directories via Volumes documentation.
 
@@ -480,7 +489,7 @@ This Dockerfile results in an image that causes docker run, to create a new moun
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#WORKDIR -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#WORKDIR">
-        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#ABSTRACT"/>
         <rdfs:comment xml:lang="en">WORKDIR /path/to/workdir
 The WORKDIR instruction sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile. If the WORKDIR doesn’t exist, it will be created even if it’s not used in any subsequent Dockerfile instruction.
 
@@ -502,9 +511,73 @@ The output of the final pwd command in this Dockerfile would be /path/$DIRNAME</
     
 
 
-    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand -->
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#builds -->
 
-    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#hasCommand"/>
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#builds">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Dockerfile"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Image"/>
+        <rdfs:comment>this represents the command 
+docker build -t image:version &lt;Dockerfile&gt;</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#nextCommand -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#nextCommand">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#previousCommand"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Command"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Command"/>
+        <rdfs:comment>this property allows to retain the ordering in the execution of the commands that constitues a docker file as a pointer to the next one</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#previousCommand -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#previousCommand">
+        <rdfs:comment>this property allows to retain the ordering in the execution of the commands that constitues a docker file as a pointer to the previous one</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#runs -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#runs">
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Image"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Container"/>
+        <rdfs:comment>this represents the command
+docker run &lt;image&gt; that instantiates a container out of an image.</rdfs:comment>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#image_digest -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#image_digest"/>
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#image_name -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#image_name"/>
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#image_tag -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#image_tag"/>
     
 
 
@@ -525,9 +598,21 @@ The output of the final pwd command in this Dockerfile would be /path/$DIRNAME</
     
 
 
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Container -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Container"/>
+    
+
+
     <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Dockerfile -->
 
     <owl:Class rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Dockerfile"/>
+    
+
+
+    <!-- http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Image -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3#Image"/>
 </rdf:RDF>
 
 
