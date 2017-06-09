@@ -1,0 +1,790 @@
+@prefix : <http://www.semanticweb.org/dockeronto#> .
+@prefix do: <http://www.semanticweb.org/dockeronto#> .
+@prefix fno: <https://w3id.org/function/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix provo: <https://www.w3.org/ns/prov-o#> .
+@base <http://www.semanticweb.org/dockeronto> .
+
+<http://www.semanticweb.org/dockeronto> rdf:type owl:Ontology ;
+                                         owl:imports rdf: ,
+                                                     <http://www.w3.org/TR/xmlschema11-2/> ,
+                                                     <http://www.w3.org/ns/prov-o-20130430> ,
+                                                     <https://w3id.org/function/ontology/0.4> .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/dockeronto#commands
+do:commands rdf:type owl:ObjectProperty .
+
+
+###  http://www.semanticweb.org/dockeronto#dest
+do:dest rdf:type owl:ObjectProperty .
+
+
+###  http://www.semanticweb.org/dockeronto#image
+do:image rdf:type owl:ObjectProperty .
+
+
+###  http://www.semanticweb.org/dockeronto#nextCommand
+do:nextCommand rdf:type owl:ObjectProperty ;
+               owl:inverseOf do:previousCommand ;
+               rdfs:domain do:Instruction ;
+               rdfs:range do:Instruction ;
+               rdfs:comment "this property allows to retain the ordering in the execution of the commands that constitues a docker file as a pointer to the next one" .
+
+
+###  http://www.semanticweb.org/dockeronto#previousCommand
+do:previousCommand rdf:type owl:ObjectProperty ;
+                   rdfs:comment "this property allows to retain the ordering in the execution of the commands that constitues a docker file as a pointer to the previous one" .
+
+
+###  http://www.semanticweb.org/dockeronto#src
+do:src rdf:type owl:ObjectProperty .
+
+
+###  https://w3id.org/function/ontology#type
+fno:type rdfs:range rdf:Property .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/dockeronto#image_digest
+do:image_digest rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/dockeronto#image_name
+do:image_name rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/dockeronto#image_tag
+do:image_tag rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/dockeronto#ADD
+do:ADD rdf:type owl:Class ;
+       rdfs:subClassOf do:Instruction ;
+       rdfs:comment """ADD
+ADD has two forms:
+
+ADD <src>... <dest>
+ADD [\"<src>\",... \"<dest>\"] (this form is required for paths containing whitespace)
+The ADD instruction copies new files, directories or remote file URLs from <src> and adds them to the filesystem of the image at the path <dest>.
+
+Multiple <src> resource may be specified but if they are files or directories then they must be relative to the source directory that is being built (the context of the build).
+
+Each <src> may contain wildcards and matching will be done using Go’s filepath.Match rules. For example:
+
+ADD hom* /mydir/        # adds all files starting with \"hom\"
+ADD hom?.txt /mydir/    # ? is replaced with any single character, e.g., \"home.txt\"
+The <dest> is an absolute path, or a path relative to WORKDIR, into which the source will be copied inside the destination container.
+
+ADD test relativeDir/          # adds \"test\" to `WORKDIR`/relativeDir/
+ADD test /absoluteDir/         # adds \"test\" to /absoluteDir/
+All new files and directories are created with a UID and GID of 0.
+
+In the case where <src> is a remote file URL, the destination will have permissions of 600. If the remote file being retrieved has an HTTP Last-Modified header, the timestamp from that header will be used to set the mtime on the destination file. However, like any other file processed during an ADD, mtime will not be included in the determination of whether or not the file has changed and the cache should be updated.
+
+Note: If you build by passing a Dockerfile through STDIN (docker build - < somefile), there is no build context, so the Dockerfile can only contain a URL based ADD instruction. You can also pass a compressed archive through STDIN: (docker build - < archive.tar.gz), the Dockerfile at the root of the archive and the rest of the archive will be used as the context of the build.
+Note: If your URL files are protected using authentication, you will need to use RUN wget, RUN curl or use another tool from within the container as the ADD instruction does not support authentication.
+Note: The first encountered ADD instruction will invalidate the cache for all following instructions from the Dockerfile if the contents of <src> have changed. This includes invalidating the cache for RUN instructions. See the Dockerfile Best Practices guide for more information.
+ADD obeys the following rules:
+
+The <src> path must be inside the context of the build; you cannot ADD ../something /something, because the first step of a docker build is to send the context directory (and subdirectories) to the docker daemon.
+
+If <src> is a URL and <dest> does not end with a trailing slash, then a file is downloaded from the URL and copied to <dest>.
+
+If <src> is a URL and <dest> does end with a trailing slash, then the filename is inferred from the URL and the file is downloaded to <dest>/<filename>. For instance, ADD http://example.com/foobar / would create the file /foobar. The URL must have a nontrivial path so that an appropriate filename can be discovered in this case (http://example.com will not work).
+
+If <src> is a directory, the entire contents of the directory are copied, including filesystem metadata."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#ARG
+do:ARG rdf:type owl:Class ;
+       rdfs:subClassOf do:Instruction ;
+       rdfs:comment """ARG <name>[=<default value>]
+The ARG instruction defines a variable that users can pass at build-time to the builder with the docker build command using the --build-arg <varname>=<value> flag. If a user specifies a build argument that was not defined in the Dockerfile, the build outputs a warning.
+
+[Warning] One or more build-args [foo] were not consumed.
+The Dockerfile author can define a single variable by specifying ARG once or many variables by specifying ARG more than once. For example, a valid Dockerfile:
+
+FROM busybox
+ARG user1
+ARG buildno
+...
+A Dockerfile author may optionally specify a default value for an ARG instruction:
+
+FROM busybox
+ARG user1=someuser
+ARG buildno=1
+...
+If an ARG value has a default and if there is no value passed at build-time, the builder uses the default.
+
+An ARG variable definition comes into effect from the line on which it is defined in the Dockerfile not from the argument’s use on the command-line or elsewhere. For example, consider this Dockerfile:
+
+1 FROM busybox
+2 USER ${user:-some_user}
+3 ARG user
+4 USER $user
+..."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#CMD
+do:CMD rdf:type owl:Class ;
+       rdfs:subClassOf do:Instruction ;
+       rdfs:comment """The CMD instruction has three forms:
+
+CMD [\"executable\",\"param1\",\"param2\"] (exec form, this is the preferred form)
+CMD [\"param1\",\"param2\"] (as default parameters to ENTRYPOINT)
+CMD command param1 param2 (shell form)
+There can only be one CMD instruction in a Dockerfile. If you list more than one CMD then only the last CMD will take effect.
+
+The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
+
+Note: If CMD is used to provide default arguments for the ENTRYPOINT instruction, both the CMD and ENTRYPOINT instructions should be specified with the JSON array format."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#COPY
+do:COPY rdf:type owl:Class ;
+        rdfs:subClassOf do:Instruction ;
+        rdfs:comment """COPY has two forms:
+
+COPY <src>... <dest>
+COPY [\"<src>\",... \"<dest>\"] (this form is required for paths containing whitespace)
+The COPY instruction copies new files or directories from <src> and adds them to the filesystem of the container at the path <dest>.
+
+Multiple <src> resource may be specified but they must be relative to the source directory that is being built (the context of the build).
+
+Each <src> may contain wildcards and matching will be done using Go’s filepath.Match rules. For example:
+
+COPY hom* /mydir/        # adds all files starting with \"hom\"
+COPY hom?.txt /mydir/    # ? is replaced with any single character, e.g., \"home.txt\"
+The <dest> is an absolute path, or a path relative to WORKDIR, into which the source will be copied inside the destination container.
+
+COPY test relativeDir/   # adds \"test\" to `WORKDIR`/relativeDir/
+COPY test /absoluteDir/  # adds \"test\" to /absoluteDir/
+All new files and directories are created with a UID and GID of 0.
+
+Note: If you build using STDIN (docker build - < somefile), there is no build context, so COPY can’t be used.
+COPY obeys the following rules:
+
+The <src> path must be inside the context of the build; you cannot COPY ../something /something, because the first step of a docker build is to send the context directory (and subdirectories) to the docker daemon.
+
+If <src> is a directory, the entire contents of the directory are copied, including filesystem metadata.
+
+Note: The directory itself is not copied, just its contents.
+If <src> is any other kind of file, it is copied individually along with its metadata. In this case, if <dest> ends with a trailing slash /, it will be considered a directory and the contents of <src> will be written at <dest>/base(<src>).
+
+If multiple <src> resources are specified, either directly or due to the use of a wildcard, then <dest> must be a directory, and it must end with a slash /.
+
+If <dest> does not end with a trailing slash, it will be considered a regular file and the contents of <src> will be written at <dest>.
+
+If <dest> doesn’t exist, it is created along with all missing directories in its path."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#Command
+do:Command rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/dockeronto#CommandExecution
+do:CommandExecution rdf:type owl:Class ;
+                    rdfs:subClassOf prov:Activity ,
+                                    fno:Execution .
+
+
+###  http://www.semanticweb.org/dockeronto#Container
+do:Container rdf:type owl:Class ;
+             rdfs:subClassOf prov:Bundle .
+
+
+###  http://www.semanticweb.org/dockeronto#DockerParameter
+do:DockerParameter rdf:type owl:Class ;
+                   rdfs:subClassOf fno:Function .
+
+
+###  http://www.semanticweb.org/dockeronto#DockerPredicate
+do:DockerPredicate rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/dockeronto#Dockerfile
+do:Dockerfile rdf:type owl:Class ;
+              rdfs:subClassOf prov:Entity ,
+                              prov:Plan ;
+              rdfs:comment """a set of instructions to 
+execute sequentially in order
+to build a Docker Image.""" .
+
+
+###  http://www.semanticweb.org/dockeronto#ENTRYPOINT
+do:ENTRYPOINT rdf:type owl:Class ;
+              rdfs:subClassOf do:Instruction ;
+              rdfs:comment """ENTRYPOINT has two forms:
+
+ENTRYPOINT [\"executable\", \"param1\", \"param2\"] (exec form, preferred)
+ENTRYPOINT command param1 param2 (shell form)
+An ENTRYPOINT allows you to configure a container that will run as an executable.
+
+For example, the following will start nginx with its default content, listening on port 80:
+
+docker run -i -t --rm -p 80:80 nginx
+Command line arguments to docker run <image> will be appended after all elements in an exec form ENTRYPOINT, and will override all elements specified using CMD. This allows arguments to be passed to the entry point, i.e., docker run <image> -d will pass the -d argument to the entry point. You can override the ENTRYPOINT instruction using the docker run --entrypoint flag.
+
+The shell form prevents any CMD or run command line arguments from being used, but has the disadvantage that your ENTRYPOINT will be started as a subcommand of /bin/sh -c, which does not pass signals. This means that the executable will not be the container’s PID 1 - and will not receive Unix signals - so your executable will not receive a SIGTERM from docker stop <container>.
+
+Only the last ENTRYPOINT instruction in the Dockerfile will have an effect."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#ENV
+do:ENV rdf:type owl:Class ;
+       rdfs:subClassOf do:Instruction ;
+       rdfs:comment """ENV <key> <value>
+ENV <key>=<value> ...
+The ENV instruction sets the environment variable <key> to the value <value>. This value will be in the environment of all “descendant” Dockerfile commands and can be replaced inline in many as well.
+
+The ENV instruction has two forms. The first form, ENV <key> <value>, will set a single variable to a value. The entire string after the first space will be treated as the <value> - including characters such as spaces and quotes.
+
+The second form, ENV <key>=<value> ..., allows for multiple variables to be set at one time. Notice that the second form uses the equals sign (=) in the syntax, while the first form does not. Like command line parsing, quotes and backslashes can be used to include spaces within values.
+
+For example:
+
+ENV myName=\"John Doe\" myDog=Rex\\ The\\ Dog \\
+    myCat=fluffy
+and
+
+ENV myName John Doe
+ENV myDog Rex The Dog
+ENV myCat fluffy
+will yield the same net results in the final image, but the first form is preferred because it produces a single cache layer.
+
+The environment variables set using ENV will persist when a container is run from the resulting image. You can view the values using docker inspect, and change them using docker run --env <key>=<value>."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#EXPOSE
+do:EXPOSE rdf:type owl:Class ;
+          rdfs:subClassOf do:Instruction ;
+          rdfs:comment """EXPOSE <port> [<port>...]
+The EXPOSE instruction informs Docker that the container listens on the specified network ports at runtime. EXPOSE does not make the ports of the container accessible to the host. To do that, you must use either the -p flag to publish a range of ports or the -P flag to publish all of the exposed ports. You can expose one port number and publish it externally under another number.
+
+To set up port redirection on the host system, see using the -P flag. The Docker network feature supports creating networks without the need to expose ports within the network, for detailed information see the overview of this feature)."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#Engine
+do:Engine rdf:type owl:Class ;
+          rdfs:subClassOf prov:SoftwareAgent .
+
+
+###  http://www.semanticweb.org/dockeronto#FROM
+do:FROM rdf:type owl:Class ;
+        rdfs:subClassOf do:Instruction ;
+        rdfs:comment """FROM <image>
+Or
+
+FROM <image>:<tag>
+Or
+
+FROM <image>@<digest>
+The FROM instruction sets the Base Image for subsequent instructions. As such, a valid Dockerfile must have FROM as its first instruction. The image can be any valid image – it is especially easy to start by pulling an image from the Public Repositories.
+
+FROM must be the first non-comment instruction in the Dockerfile.
+
+FROM can appear multiple times within a single Dockerfile in order to create multiple images. Simply make a note of the last image ID output by the commit before each new FROM command.
+
+The tag or digest values are optional. If you omit either of them, the builder assumes a latest by default. The builder returns an error if it cannot match the tag value."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#HEALTHCHECK
+do:HEALTHCHECK rdf:type owl:Class ;
+               rdfs:subClassOf do:Instruction ;
+               rdfs:comment """The HEALTHCHECK instruction has two forms:
+
+HEALTHCHECK [OPTIONS] CMD command (check container health by running a command inside the container)
+HEALTHCHECK NONE (disable any healthcheck inherited from the base image)
+The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working. This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running.
+
+When a container has a healthcheck specified, it has a health status in addition to its normal status. This status is initially starting. Whenever a health check passes, it becomes healthy (whatever state it was previously in). After a certain number of consecutive failures, it becomes unhealthy.
+
+The options that can appear before CMD are:
+
+--interval=DURATION (default: 30s)
+--timeout=DURATION (default: 30s)
+--retries=N (default: 3)
+The health check will first run interval seconds after the container is started, and then again interval seconds after each previous check completes.
+
+If a single run of the check takes longer than timeout seconds then the check is considered to have failed.
+
+It takes retries consecutive failures of the health check for the container to be considered unhealthy.
+
+There can only be one HEALTHCHECK instruction in a Dockerfile. If you list more than one then only the last HEALTHCHECK will take effect.
+
+The command after the CMD keyword can be either a shell command (e.g. HEALTHCHECK CMD /bin/check-running) or an exec array (as with other Dockerfile commands; see e.g. ENTRYPOINT for details).
+
+The command’s exit status indicates the health status of the container. The possible values are:
+
+0: success - the container is healthy and ready for use
+1: unhealthy - the container is not working correctly
+2: reserved - do not use this exit code
+For example, to check every five minutes or so that a web-server is able to serve the site’s main page within three seconds:
+
+HEALTHCHECK --interval=5m --timeout=3s \\
+  CMD curl -f http://localhost/ || exit 1
+To help debug failing probes, any output text (UTF-8 encoded) that the command writes on stdout or stderr will be stored in the health status and can be queried with docker inspect. Such output should be kept short (only the first 4096 bytes are stored currently).
+
+When the health status of a container changes, a health_status event is generated with the new status.
+
+The HEALTHCHECK feature was added in Docker 1.12."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#Image
+do:Image rdf:type owl:Class ;
+         rdfs:subClassOf prov:Bundle .
+
+
+###  http://www.semanticweb.org/dockeronto#Instruction
+do:Instruction rdf:type owl:Class ;
+               rdfs:subClassOf prov:Entity .
+
+
+###  http://www.semanticweb.org/dockeronto#JSONArray
+do:JSONArray rdf:type owl:Class ;
+             rdfs:comment """This class represents the json array of strings used in some commands within a Dockerfile.
+
+Examples.
+
+ADD""" .
+
+
+###  http://www.semanticweb.org/dockeronto#LABEL
+do:LABEL rdf:type owl:Class ;
+         rdfs:subClassOf do:Instruction ;
+         rdfs:comment """LABEL <key>=<value> <key>=<value> <key>=<value> ...
+The LABEL instruction adds metadata to an image. A LABEL is a key-value pair. To include spaces within a LABEL value, use quotes and backslashes as you would in command-line parsing. A few usage examples:
+
+LABEL \"com.example.vendor\"=\"ACME Incorporated\"
+LABEL com.example.label-with-value=\"foo\"
+LABEL version=\"1.0\"
+LABEL description=\"This text illustrates \\
+that label-values can span multiple lines.\"
+An image can have more than one label. To specify multiple labels, Docker recommends combining labels into a single LABEL instruction where possible. Each LABEL instruction produces a new layer which can result in an inefficient image if you use many labels. This example results in a single image layer.
+
+LABEL multi.label1=\"value1\" multi.label2=\"value2\" other=\"value3\"
+The above can also be written as:
+
+LABEL multi.label1=\"value1\" \\
+      multi.label2=\"value2\" \\
+      other=\"value3\"
+Labels are additive including LABELs in FROM images. If Docker encounters a label/key that already exists, the new value overrides any previous labels with identical keys.
+
+To view an image’s labels, use the docker inspect command.
+
+\"Labels\": {
+    \"com.example.vendor\": \"ACME Incorporated\"
+    \"com.example.label-with-value\": \"foo\",
+    \"version\": \"1.0\",
+    \"description\": \"This text illustrates that label-values can span multiple lines.\",
+    \"multi.label1\": \"value1\",
+    \"multi.label2\": \"value2\",
+    \"other\": \"value3\"
+},"""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#MAINTAINER
+do:MAINTAINER rdf:type owl:Class ;
+              rdfs:subClassOf do:Instruction ;
+              rdfs:comment """MAINTAINER <name>
+The MAINTAINER instruction sets the Author field of the generated images. The LABEL instruction is a much more flexible version of this and you should use it instead, as it enables setting any metadata you require, and can be viewed easily, for example with docker inspect. To set a label corresponding to the MAINTAINER field you could use:
+
+LABEL maintainer \"SvenDowideit@home.org.au\"
+This will then be visible from docker inspect with the other labels."""@en ;
+              owl:deprecated "True"@n .
+
+
+###  http://www.semanticweb.org/dockeronto#ONBUILD
+do:ONBUILD rdf:type owl:Class ;
+           rdfs:subClassOf do:Instruction ;
+           rdfs:comment """ONBUILD [INSTRUCTION]
+The ONBUILD instruction adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build. The trigger will be executed in the context of the downstream build, as if it had been inserted immediately after the FROM instruction in the downstream Dockerfile.
+
+Any build instruction can be registered as a trigger.
+
+This is useful if you are building an image which will be used as a base to build other images, for example an application build environment or a daemon which may be customized with user-specific configuration.
+
+For example, if your image is a reusable Python application builder, it will require application source code to be added in a particular directory, and it might require a build script to be called after that. You can’t just call ADD and RUN now, because you don’t yet have access to the application source code, and it will be different for each application build. You could simply provide application developers with a boilerplate Dockerfile to copy-paste into their application, but that is inefficient, error-prone and difficult to update because it mixes with application-specific code.
+
+The solution is to use ONBUILD to register advance instructions to run later, during the next build stage.
+
+Here’s how it works:
+
+When it encounters an ONBUILD instruction, the builder adds a trigger to the metadata of the image being built. The instruction does not otherwise affect the current build.
+At the end of the build, a list of all triggers is stored in the image manifest, under the key OnBuild. They can be inspected with the docker inspect command.
+Later the image may be used as a base for a new build, using the FROM instruction. As part of processing the FROM instruction, the downstream builder looks for ONBUILD triggers, and executes them in the same order they were registered. If any of the triggers fail, the FROM instruction is aborted which in turn causes the build to fail. If all triggers succeed, the FROM instruction completes and the build continues as usual.
+Triggers are cleared from the final image after being executed. In other words they are not inherited by “grand-children” builds.
+For example you might add something like this:
+
+[...]
+ONBUILD ADD . /app/src
+ONBUILD RUN /usr/local/bin/python-build --dir /app/src
+[...]
+Warning: Chaining ONBUILD instructions using ONBUILD ONBUILD isn’t allowed.
+Warning: The ONBUILD instruction may not trigger FROM or MAINTAINER instructions."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#RUN
+do:RUN rdf:type owl:Class ;
+       rdfs:subClassOf do:Instruction ;
+       rdfs:comment """RUN has 2 forms:
+
+RUN <command> (shell form, the command is run in a shell, which by default is /bin/sh -c on Linux or cmd /S /C on Windows)
+RUN [\"executable\", \"param1\", \"param2\"] (exec form)
+The RUN instruction will execute any commands in a new layer on top of the current image and commit the results. The resulting committed image will be used for the next step in the Dockerfile.
+
+Layering RUN instructions and generating commits conforms to the core concepts of Docker where commits are cheap and containers can be created from any point in an image’s history, much like source control.
+
+The exec form makes it possible to avoid shell string munging, and to RUN commands using a base image that does not contain the specified shell executable."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#SHELL
+do:SHELL rdf:type owl:Class ;
+         rdfs:subClassOf do:Instruction ;
+         rdfs:comment """SHELL [\"executable\", \"parameters\"]
+The SHELL instruction allows the default shell used for the shell form of commands to be overridden. The default shell on Linux is [\"/bin/sh\", \"-c\"], and on Windows is [\"cmd\", \"/S\", \"/C\"]. The SHELL instruction must be written in JSON form in a Dockerfile.
+
+The SHELL instruction is particularly useful on Windows where there are two commonly used and quite different native shells: cmd and powershell, as well as alternate shells available including sh.
+
+The SHELL instruction can appear multiple times. Each SHELL instruction overrides all previous SHELL instructions, and affects all subsequent instructions. For example:
+
+FROM microsoft/windowsservercore
+
+# Executed as cmd /S /C echo default
+RUN echo default
+
+# Executed as cmd /S /C powershell -command Write-Host default
+RUN powershell -command Write-Host default
+
+# Executed as powershell -command Write-Host hello
+SHELL [\"powershell\", \"-command\"]
+RUN Write-Host hello
+
+# Executed as cmd /S /C echo hello
+SHELL [\"cmd\", \"/S\"\", \"/C\"]
+RUN echo hello
+The following instructions can be affected by the SHELL instruction when the shell form of them is used in a Dockerfile: RUN, CMD and ENTRYPOINT.
+
+The following example is a common pattern found on Windows which can be streamlined by using the SHELL instruction:
+
+...
+RUN powershell -command Execute-MyCmdlet -param1 \"c:\\foo.txt\"
+...
+The command invoked by docker will be:
+
+cmd /S /C powershell -command Execute-MyCmdlet -param1 \"c:\\foo.txt\"
+This is inefficient for two reasons. First, there is an un-necessary cmd.exe command processor (aka shell) being invoked. Second, each RUN instruction in the shell form requires an extra powershell -command prefixing the command.
+
+To make this more efficient, one of two mechanisms can be employed. One is to use the JSON form of the RUN command such as:
+
+...
+RUN [\"powershell\", \"-command\", \"Execute-MyCmdlet\", \"-param1 \\\"c:\\\\foo.txt\\\"\"]
+...
+While the JSON form is unambiguous and does not use the un-necessary cmd.exe, it does require more verbosity through double-quoting and escaping. The alternate mechanism is to use the SHELL instruction and the shell form, making a more natural syntax for Windows users, especially when combined with the escape parser directive:
+
+# escape=`
+
+FROM microsoft/nanoserver
+SHELL [\"powershell\",\"-command\"]
+RUN New-Item -ItemType Directory C:\\Example
+ADD Execute-MyCmdlet.ps1 c:\\example\\
+RUN c:\\example\\Execute-MyCmdlet -sample 'hello world'"""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#STOPSIGNAL
+do:STOPSIGNAL rdf:type owl:Class ;
+              rdfs:subClassOf do:Instruction ;
+              rdfs:comment "The STOPSIGNAL instruction sets the system call signal that will be sent to the container to exit. This signal can be a valid unsigned number that matches a position in the kernel’s syscall table, for instance 9, or a signal name in the format SIGNAME, for instance SIGKILL."@en .
+
+
+###  http://www.semanticweb.org/dockeronto#USER
+do:USER rdf:type owl:Class ;
+        rdfs:subClassOf do:Instruction ;
+        rdfs:comment """USER daemon
+The USER instruction sets the user name or UID to use when running the image and for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#VOLUME
+do:VOLUME rdf:type owl:Class ;
+          rdfs:subClassOf do:Instruction ;
+          rdfs:comment """VOLUME [\"/data\"]
+The VOLUME instruction creates a mount point with the specified name and marks it as holding externally mounted volumes from native host or other containers. The value can be a JSON array, VOLUME [\"/var/log/\"], or a plain string with multiple arguments, such as VOLUME /var/log or VOLUME /var/log /var/db. For more information/examples and mounting instructions via the Docker client, refer to Share Directories via Volumes documentation.
+
+The docker run command initializes the newly created volume with any data that exists at the specified location within the base image. For example, consider the following Dockerfile snippet:
+
+FROM ubuntu
+RUN mkdir /myvol
+RUN echo \"hello world\" > /myvol/greeting
+VOLUME /myvol
+This Dockerfile results in an image that causes docker run, to create a new mount point at /myvol and copy the greeting file into the newly created volume."""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#WORKDIR
+do:WORKDIR rdf:type owl:Class ;
+           rdfs:subClassOf do:Instruction ;
+           rdfs:comment """WORKDIR /path/to/workdir
+The WORKDIR instruction sets the working directory for any RUN, CMD, ENTRYPOINT, COPY and ADD instructions that follow it in the Dockerfile. If the WORKDIR doesn’t exist, it will be created even if it’s not used in any subsequent Dockerfile instruction.
+
+It can be used multiple times in the one Dockerfile. If a relative path is provided, it will be relative to the path of the previous WORKDIR instruction. For example:
+
+WORKDIR /a
+WORKDIR b
+WORKDIR c
+RUN pwd
+The output of the final pwd command in this Dockerfile would be /a/b/c.
+
+The WORKDIR instruction can resolve environment variables previously set using ENV. You can only use environment variables explicitly set in the Dockerfile. For example:
+
+ENV DIRPATH /path
+WORKDIR $DIRPATH/$DIRNAME
+RUN pwd
+The output of the final pwd command in this Dockerfile would be /path/$DIRNAME"""@en .
+
+
+###  http://www.semanticweb.org/dockeronto#builds
+do:builds rdf:type owl:Class ;
+          rdfs:subClassOf do:Command ;
+          rdfs:comment """this represents the command 
+docker build -t image:version <Dockerfile>""" .
+
+
+###  http://www.semanticweb.org/dockeronto#runs
+do:runs rdf:type owl:Class ;
+        rdfs:subClassOf do:Command ;
+        rdfs:comment """this represents the command
+docker run <image> that instantiates a container out of an image.""" .
+
+
+###  http://www.w3.org/ns/prov#KeyEntityPair
+prov:KeyEntityPair rdf:type owl:Class .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://www.semanticweb.org/dockeronto#add
+do:add rdf:type owl:NamedIndividual ,
+                do:ADD ;
+       fno:expects do:add_signature ;
+       fno:returns do:imageOutput .
+
+
+###  http://www.semanticweb.org/dockeronto#add_list
+do:add_list rdf:type owl:NamedIndividual ,
+                     do:ADD .
+
+
+###  http://www.semanticweb.org/dockeronto#add_signature
+do:add_signature rdf:type owl:NamedIndividual ,
+                          rdf:List ;
+                 rdf:first do:src_param ;
+                 rdf:rest do:dest_param .
+
+
+###  http://www.semanticweb.org/dockeronto#arg
+do:arg rdf:type owl:NamedIndividual ,
+                do:ARG .
+
+
+###  http://www.semanticweb.org/dockeronto#cmd
+do:cmd rdf:type owl:NamedIndividual ,
+                do:CMD .
+
+
+###  http://www.semanticweb.org/dockeronto#cmd_exec
+do:cmd_exec rdf:type owl:NamedIndividual ,
+                     do:CMD .
+
+
+###  http://www.semanticweb.org/dockeronto#cmd_shell
+do:cmd_shell rdf:type owl:NamedIndividual ,
+                      do:CMD .
+
+
+###  http://www.semanticweb.org/dockeronto#commands
+do:commands rdf:type owl:NamedIndividual ,
+                     rdf:Property .
+
+
+###  http://www.semanticweb.org/dockeronto#copy
+do:copy rdf:type owl:NamedIndividual ,
+                 do:COPY .
+
+
+###  http://www.semanticweb.org/dockeronto#copy_list
+do:copy_list rdf:type owl:NamedIndividual ,
+                      do:COPY .
+
+
+###  http://www.semanticweb.org/dockeronto#dest
+do:dest rdf:type owl:NamedIndividual ,
+                 rdf:Property .
+
+
+###  http://www.semanticweb.org/dockeronto#dest_param
+do:dest_param rdf:type owl:NamedIndividual ,
+                       rdf:Property ;
+              fno:predicate do:dest ;
+              fno:type xsd:string .
+
+
+###  http://www.semanticweb.org/dockeronto#entrypoint_shell
+do:entrypoint_shell rdf:type owl:NamedIndividual ,
+                             do:ENTRYPOINT .
+
+
+###  http://www.semanticweb.org/dockeronto#entrypost_exec
+do:entrypost_exec rdf:type owl:NamedIndividual ,
+                           do:ENTRYPOINT .
+
+
+###  http://www.semanticweb.org/dockeronto#env
+do:env rdf:type owl:NamedIndividual ,
+                do:ENV .
+
+
+###  http://www.semanticweb.org/dockeronto#expose
+do:expose rdf:type owl:NamedIndividual ,
+                   do:EXPOSE .
+
+
+###  http://www.semanticweb.org/dockeronto#from
+do:from rdf:type owl:NamedIndividual ,
+                 do:FROM ,
+                 fno:Function ;
+        fno:expects do:from_signature ;
+        fno:returns do:instruction_output .
+
+
+###  http://www.semanticweb.org/dockeronto#from_digest
+do:from_digest rdf:type owl:NamedIndividual ,
+                        do:FROM .
+
+
+###  http://www.semanticweb.org/dockeronto#from_signature
+do:from_signature rdf:type owl:NamedIndividual ,
+                           rdf:List ;
+                  rdf:first do:imageInput .
+
+
+###  http://www.semanticweb.org/dockeronto#from_tag
+do:from_tag rdf:type owl:NamedIndividual ,
+                     do:FROM .
+
+
+###  http://www.semanticweb.org/dockeronto#healthcheck_cmd
+do:healthcheck_cmd rdf:type owl:NamedIndividual ,
+                            do:HEALTHCHECK .
+
+
+###  http://www.semanticweb.org/dockeronto#healthcheck_disable
+do:healthcheck_disable rdf:type owl:NamedIndividual ,
+                                do:HEALTHCHECK .
+
+
+###  http://www.semanticweb.org/dockeronto#image
+do:image rdf:type owl:NamedIndividual ,
+                  rdf:Property .
+
+
+###  http://www.semanticweb.org/dockeronto#imageInput
+do:imageInput rdf:type owl:NamedIndividual ,
+                       do:DockerParameter .
+
+
+###  http://www.semanticweb.org/dockeronto#imageOutput
+do:imageOutput rdf:type owl:NamedIndividual ,
+                        do:DockerPredicate .
+
+
+###  http://www.semanticweb.org/dockeronto#instruction_output
+do:instruction_output rdf:type owl:NamedIndividual ,
+                               rdf:List ;
+                      fno:returns do:imageOutput .
+
+
+###  http://www.semanticweb.org/dockeronto#label
+do:label rdf:type owl:NamedIndividual ,
+                  do:LABEL .
+
+
+###  http://www.semanticweb.org/dockeronto#maintainer
+do:maintainer rdf:type owl:NamedIndividual ,
+                       do:MAINTAINER .
+
+
+###  http://www.semanticweb.org/dockeronto#onbuild
+do:onbuild rdf:type owl:NamedIndividual ,
+                    do:ONBUILD .
+
+
+###  http://www.semanticweb.org/dockeronto#port
+do:port rdf:type owl:NamedIndividual ,
+                 do:DockerPredicate .
+
+
+###  http://www.semanticweb.org/dockeronto#run
+do:run rdf:type owl:NamedIndividual ,
+                do:RUN .
+
+
+###  http://www.semanticweb.org/dockeronto#run_exec
+do:run_exec rdf:type owl:NamedIndividual ,
+                     do:RUN .
+
+
+###  http://www.semanticweb.org/dockeronto#shell
+do:shell rdf:type owl:NamedIndividual ,
+                  do:SHELL .
+
+
+###  http://www.semanticweb.org/dockeronto#src
+do:src rdf:type owl:NamedIndividual ,
+                rdf:Property .
+
+
+###  http://www.semanticweb.org/dockeronto#src_param
+do:src_param rdf:type owl:NamedIndividual ,
+                      rdf:Property ;
+             fno:predicate do:src ;
+             fno:type xsd:string .
+
+
+###  http://www.semanticweb.org/dockeronto#user
+do:user rdf:type owl:NamedIndividual ,
+                 do:USER .
+
+
+###  http://www.semanticweb.org/dockeronto#volume
+do:volume rdf:type owl:NamedIndividual ,
+                   do:VOLUME .
+
+
+###  http://www.semanticweb.org/dockeronto#workdir
+do:workdir rdf:type owl:NamedIndividual ,
+                    do:WORKDIR .
+
+
+###  http://www.w3.org/2001/XMLSchema#string
+xsd:string rdf:type owl:NamedIndividual ,
+                    rdfs:Resource .
+
+
+###  Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi
