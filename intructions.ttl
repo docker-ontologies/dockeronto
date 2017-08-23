@@ -1,0 +1,162 @@
+@prefix : <http://linkedcontainers.org/vocab#> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix do: <http://linkedcontainers.org/vocab#> .
+@prefix vs: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix fno: <https://w3id.org/function/ontology#> .
+@prefix max: <http://maxime-lefrancois.info/me#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix voaf: <http://purl.org/vocommons/voaf#> .
+@base <http://linkedcontainers.org/vocab> .
+
+<http://linkedcontainers.org/vocab> rdf:type owl:Ontology ;
+                                     owl:imports rdf: ,
+                                                 <http://www.w3.org/ns/prov-o-20130430> ,
+                                                 <https://w3id.org/function/ontology/0.4> .
+
+do:from a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam ) ;
+fno:returns ( do:imageOutputParam ) .
+
+##
+
+do:entrypoint a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam ) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:user a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam ) ;
+fno:returns ( do:imageOutputParam ) .
+
+##
+
+do:add a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam do:add_src do:add_dest) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:add_src a fno:Parameter ;
+          fno:predicate do:addSrc ;
+          fno:type xsd:String .
+
+do:add_dest a fno:Parameter ;
+            fno:predicate do:addDest ;
+          fno:type xsd:String .
+
+##
+
+do:label a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam do:labelKey do:labelVal) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:labelKey a fno:Parameter ;
+          fno:predicate do:labelKeyCmd ;
+          fno:type xsd:String .
+
+do:labelVal a fno:Parameter ;
+            fno:predicate do:labelValCmd ;
+          fno:type xsd:String .
+
+
+##
+
+do:workdir a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam ) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:arg a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam ) ;
+fno:returns ( do:imageOutputParam ) .
+
+##
+
+do:cmd a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam do:cmdInputCommand do:cmdInputParamList) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:cmdInputCommand a fno:Parameter ;
+  fno:predicate do:cmdCMD ;
+      fno:type do:Command .
+
+do:cmdInputParamList a fno:Parameter, rdf:List ;
+  fno:predicate do:cmdCMDParams ;
+      fno:type do:Param .
+
+##
+
+do:run a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam do:runInputCommand ) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:runInputCommand a fno:Parameter ;
+  fno:predicate do:runCmd ;
+      fno:type do:Command .
+
+##
+
+do:env a fno:Function, do:Instruction ;
+fno:expects ( do:imageInputParam ) ;
+fno:returns ( do:imageOutputParam ) .
+
+do:envKey a fno:Parameter ;
+          fno:predicate do:envKeyCmd ;
+          fno:type xsd:String .
+
+do:envValue a fno:Parameter ;
+            fno:predicate do:envValCmd ;
+             fno:type xsd:String .
+
+##
+
+do:port a fno:Function, do:Instruction ;
+  fno:expects ( do:imageInputParam do:portValue) ;
+  fno:returns ( do:imageOutputParam ) .
+
+do:portValue a fno:Parameter ;
+        fno:predicate do:portValCmd ;
+        fno:type xsd:Integer .
+## 
+
+do:volume a fno:Function, do:Instruction ;
+  fno:expects ( do:imageInputParam ) ;
+  fno:returns ( do:imageOutputParam ) .
+
+##
+
+do:copy a fno:Function, do:Instruction ;
+  fno:expects ( do:imageInputParam  do:copy_src do:copy_dest) ;
+  fno:returns ( do:imageOutputParam ) .
+
+do:copy_src a fno:Parameter ;
+          fno:predicate do:copySrc  ;
+  fno:type xsd:String .
+
+do:copy_dest a fno:Parameter ;
+            fno:predicate do:copyDest ;
+            fno:type xsd:String .
+
+##
+
+do:maintainer a fno:Function, do:Instruction ;
+  fno:expects ( do:imageInputParam ) ;
+  fno:returns ( do:imageOutputParam ) .
+
+do:expose a fno:Function, do:Instruction ;
+  fno:expects ( do:imageInputParam ) ;
+  fno:returns ( do:imageOutputParam ) .
+
+do:imageInputParam a fno:Parameter ;
+  fno:predicate do:imageInput  ;
+  fno:type do:Image .
+
+do:imageOutputParam a fno:Output ;
+  fno:predicate do:imageOutput ;
+  fno:type do:Image .
+

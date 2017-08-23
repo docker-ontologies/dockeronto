@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <uri id="Imports Wizard Entry" name="http://www.w3.org/1999/02/22-rdf-syntax-ns#" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns"/>
+    <uri id="Imports Wizard Entry" name="https://w3id.org/function/ontology/0.4" uri="https://w3id.org/function/ontology#"/>
+    <uri id="Imports Wizard Entry" name="http://www.w3.org/ns/prov-o-20130430" uri="https://www.w3.org/ns/prov-o"/>
     <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
-        <uri id="Automatically generated entry, Timestamp=1496393611221" name="duplicate:http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3" uri="dockeronto.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1496393611221" name="duplicate:http://www.semanticweb.org/riccardo/ontologies/2017/5/untitled-ontology-3" uri="Untitled.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1503492836718" name="http://linkedcontainers.org/vocab" uri="ontology.owl"/>
     </group>
 </catalog>
